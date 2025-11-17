@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kastimäng</title>
+<style>
+  body {
+    background: #e5e7eb;
+    font-family: sans-serif;
+    text-align: center;
+  }
+  #game {
+    display: inline-block;
+    margin-top: 30px;
+    position: relative;
+  }
+  .wall {
+    width: 60px;
+    height: 60px;
+    background: #555;
+    position: absolute;
+  }
+  .floor {
+    width: 60px;
+    height: 60px;
+    background: #ccc;
+    position: absolute;
+  }
+  .goal {
+    width: 20px;
+    height: 20px;
+    background: greenyellow;
+    border-radius: 50%;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
+  .box {
+    width: 50px;
+    height: 50px;
+    background: brown;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+  }
+  .player {
+    width: 50px;
+    height: 50px;
+    background: orange;
+    border-radius: 50%;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+  }
+</style>
+</head>
+<body>
+
+<h2>Kastimäng</h2>
+<p>Liigu nooleklahvidega ja lükka kast rohelisele mummule.</p>
+
+<div id="game" style="width:420px; height:360px; background:#555;">
+  <!-- Põrandad -->
+  <div class="floor" style="top:60px; left:60px;"></div>
+  <div class="floor" style="top:60px; left:120px;"></div>
+  <div class="floor" style="top:120px; left:60px;"></div>
+  <div class="floor" style="top:120px; left:120px;"></div>
+  <div class="floor" style="top:120px; left:180px;"></div>
+  <div class="floor" style="top:120px; left:240px;"></div>
+  <div class="floor" style="top:120px; left:300px;"></div>
+  <div class="floor" style="top:180px; left:60px;"></div>
+  <div class="floor" style="top:180px; left:120px;"></div>
+  <div class="floor" style="top:180px; left:180px;"></div>
+  <div class="floor" style="top:180px; left:240px;"></div>
+  <div class="floor" style="top:180px; left:300px;"></div>
+  <div class="floor" style="top:240px; left:180px;"></div>
+  <div class="floor" style="top:240px; left:240px;"></div>
+  <div class="floor" style="top:240px; left:300px;"></div>
+
+
+  <!-- Mumm (eesmärk) -->
+  <!-- <div class="goal" id="goal" style="top:200px; left:140px;"></div> -->
+   <div class="goal" id="goal" style="top:260px; left:200px;"></div>
+
+
+  <!-- Nägu - alustaja asukoha sättimine -->
+  <div class="player" id="player" style="top:185px; left:65px;">😐</div>
+
+  <!-- Kast  - kasti asukoha sättimine -->
+  <!-- <div class="box" id="box" style="top:125px; left:185px;"></div> -->
+  <div class="box" id="box" style="top:125px; left:125px;"></div>
+
+</div>
+
+<script>
+  const player = document.getElementById('player');
+  const box = document.getElementById('box');
+  const goal = document.getElementById('goal');
+
+// <!-- Nägu - KA alustaja asukoha sättimine -->
+//   let playerX = 65;
+//   let playerY = 125;
+  let playerX = 65;
+  let playerY = 185;
+
+//   <!-- Kast  - KA kasti asukoha sättimine -->
+//   let boxX = 185;
+//   let boxY = 125;
+  let boxX = 125;
+  let boxY = 125;
+
+  document.addEventListener('keydown', function(e) {
+    let newX = playerX;
+    let newY = playerY;
+
+    if (e.key === 'ArrowRight') newX += 60;
+    if (e.key === 'ArrowLeft') newX -= 60;
+    if (e.key === 'ArrowUp') newY -= 60;
+    if (e.key === 'ArrowDown') newY += 60;
+
+    // piirid (seinad)
+    // ORIG // 
+    // if (newX < 65 || newX > 185 || newY < 65 || newY > 185) return;
+    if (newX < 65 || newX > 305 || newY < 65 || newY > 305) return;
+
+    // kui mängija liigub kasti peale
+    if (newX === boxX && newY === boxY) {
+      let newBoxX = boxX;
+      let newBoxY = boxY;
+
+      if (e.key === 'ArrowRight') newBoxX += 60;
+      if (e.key === 'ArrowLeft') newBoxX -= 60;
+      if (e.key === 'ArrowUp') newBoxY -= 60;
+      if (e.key === 'ArrowDown') newBoxY += 60;
+
+      // kontroll, et kast ei lähe seina taha
+      // ORIG // if (newBoxX < 65 || newBoxX > 185 || newBoxY < 65 || newBoxY > 185) return;
+      if (newBoxX < 65 || newBoxX > 305 || newBoxY < 65 || newBoxY > 305) return;
+
+      boxX = newBoxX;
+      boxY = newBoxY;
+      box.style.left = boxX + 'px';
+      box.style.top = boxY + 'px';
+    }
+
+    playerX = newX;
+    playerY = newY;
+    player.style.left = playerX + 'px';
+    player.style.top = playerY + 'px';
+
+    // kontroll, kas kast on mummu peal
+    if (Math.abs(boxX - 140) < 10 && Math.abs(boxY - 200) < 10) {
+      player.textContent = '😄';
+      alert('Tubli! Kast on kohal!');
+    }
+  });
+</script>
+
+</body>
+</html>
