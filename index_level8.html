@@ -76,18 +76,17 @@
   <div class="floor" style="top:240px; left:300px;"></div>
   
   <!-- Eesmärgid -->
-  <div class="goal" id="goal1" style="left:80px; top:80px; "></div>
-  <div class="goal" id="goal2" style="left:80px; top:140px; "></div>
+  <div class="goal" id="goal1" style="left:80px; top:80px;"></div>
+  <div class="goal" id="goal2" style="left:80px; top:140px;"></div>
   <div class="goal" id="goal3" style="left:200px; top:260px;"></div>
 
   <!-- Mängija -->
   <div class="player" id="player" style="top:185px; left:65px;">😐</div>
 
   <!-- Kastid -->
-   <!-- left = X-telg ja top = Y-telg -->
-  <div class="box" id="box1" style="left:125px; top:125px; "></div>
+  <div class="box" id="box1" style="left:125px; top:125px;"></div>
   <div class="box" id="box2" style="left:125px; top:185px;"></div>
-  <div class="box" id="box3" style="left:245px; top:185px; "></div>
+  <div class="box" id="box3" style="left:245px; top:185px;"></div>
 </div>
 
 <script>
@@ -95,14 +94,28 @@
   const boxes = [
     { el: document.getElementById('box1'), x: 125, y: 125 },
     { el: document.getElementById('box2'), x: 125, y: 185 },
-    { el: document.getElementById('box3'), x: 245, y: 185 } 
+    { el: document.getElementById('box3'), x: 245, y: 185 }
   ];
 
   const goals = [
-    { x: 80, y: 80 }, // goal1
-    { x: 80, y: 140 },  // goal2
-    { x: 200, y: 260 }   // goal3
+    { x: 80, y: 80 },
+    { x: 80, y: 140 },
+    { x: 200, y: 260 }
   ];
+
+  // Põrandate koordinaadid
+  const floors = [
+    { x: 60, y: 60 }, { x: 120, y: 60 },
+    { x: 60, y: 120 }, { x: 120, y: 120 },
+    { x: 180, y: 120 }, { x: 240, y: 120 }, { x: 300, y: 120 },
+    { x: 60, y: 180 }, { x: 120, y: 180 }, { x: 180, y: 180 },
+    { x: 240, y: 180 }, { x: 300, y: 180 },
+    { x: 180, y: 240 }, { x: 240, y: 240 }, { x: 300, y: 240 }
+  ];
+
+  function isFloor(x, y) {
+    return floors.some(f => f.x + 5 === x && f.y + 5 === y);
+  }
 
   let playerX = 65;
   let playerY = 185;
@@ -116,7 +129,8 @@
     if (e.key === 'ArrowUp') newY -= 60;
     if (e.key === 'ArrowDown') newY += 60;
 
-    if (newX < 65 || newX > 305 || newY < 65 || newY > 305) return;
+    // Kontroll, et mängija liigub põrandale
+    if (!isFloor(newX, newY)) return;
 
     // Kontroll, kas mängija liigub mõne kasti peale
     let pushedBox = boxes.find(b => b.x === newX && b.y === newY);
@@ -129,7 +143,8 @@
       if (e.key === 'ArrowUp') newBoxY -= 60;
       if (e.key === 'ArrowDown') newBoxY += 60;
 
-      if (newBoxX < 65 || newBoxX > 305 || newBoxY < 65 || newBoxY > 305) return;
+      // Kontroll, et kast liigub põrandale
+      if (!isFloor(newBoxX, newBoxY)) return;
 
       // Kontroll, et kast ei lükka teist kasti
       if (boxes.some(b => b !== pushedBox && b.x === newBoxX && b.y === newBoxY)) return;
