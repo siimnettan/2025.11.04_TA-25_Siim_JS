@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Jooksutaja</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        textarea { width: 100%; height: 150px; font-family: monospace; font-size: 14px; }
+        button { margin-top: 10px; padding: 10px 15px; font-size: 16px; }
+        #output { margin-top: 20px; padding: 10px; background: #f4f4f4; border: 1px solid #ccc; min-height: 100px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Jooksutaja</h1>
+    <p>Sisesta oma JavaScript kood:</p>
+    <textarea id="code">// Näide: console.log("Tere maailm!");</textarea>
+    <br>
+    <button onclick="runCode()">Käivita kood</button>
+    <div id="output"></div>
+
+    <script>
+        // Asendame console.log, et logid ilmuksid lehele
+        const outputDiv = document.getElementById('output');
+        console.stdlog = console.log.bind(console);
+        console.log = function(...args) {
+            outputDiv.innerHTML += args.join(' ') + '<br>';
+            console.stdlog(...args);
+        };
+
+        function runCode() {
+            const code = document.getElementById('code').value;
+            outputDiv.innerHTML = ''; // puhasta eelmine väljund
+            try {
+                new Function(code)(); // turvalisem kui eval
+            } catch (error) {
+                outputDiv.innerHTML = '<span style="color:red;"><strong>Viga:</strong> ' + error + '</span>';
+            }
+        }
+    </script>
+</body>
+</html>
